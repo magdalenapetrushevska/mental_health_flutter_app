@@ -80,9 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if(isAlreadySelected){
       return;
     }
-    // if(value == true){
-    //   score++;
-    // }
+
     score+=value;
 
     setState(() {
@@ -117,19 +115,25 @@ class _HomeScreenState extends State<HomeScreen> {
             return Scaffold(
         backgroundColor:background,
         appBar: AppBar(
-          title: const Text('Mental health app'),
+          title: const Text('Mental health test'),
           backgroundColor: background,
           shadowColor: Colors.transparent,
-          actions: [
-            Padding(padding: const EdgeInsets.all(18.0),
-             child:Text('Score: $score',
-             style:const TextStyle(fontSize: 18.0)),),
-          ],
+          // actions: [
+          //   Padding(padding: const EdgeInsets.all(18.0),
+          //    child:Text('Score: $score',
+          //    style:const TextStyle(fontSize: 18.0)),),
+          // ],
         ),
+        
         body:Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           width: double.infinity,
           child:Column(children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text('Over the last 2 weeks, how often have you been bothered by the following problems?'),
+            ),
+            SizedBox(height: 20.0,),
             QuestionWidget(
               question: extractedData[index].title, 
               indexAction: index, 
