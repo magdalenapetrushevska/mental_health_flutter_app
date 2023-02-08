@@ -59,6 +59,23 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/smile.png
+    - assets/images/completed.png
+    - assets/images/test.png
+    - assets/images/medal.png
+    - assets/images/home_page_activities.png
+    - assets/images/home_page_motivation.png
+    - assets/images/home_page_articles.png
+    - assets/images/home_page_tests.png
+    - assets/images/avatar.jpg
+    - assets/images/article_depression.webp
+    - assets/images/article_second_depression.webp
+    - assets/images/feeling_awful.png
+    - assets/images/feeling_bad.png
+    - assets/images/feeling_okay.png
+    - assets/images/feeling_good.png
+    - assets/images/feeling_great.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

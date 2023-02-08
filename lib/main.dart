@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import './screens/home_screen.dart';
+import 'package:mental_health_flutter_app/screens/home_screen.dart';
+//import 'models/question_model.dart';
 //import './models/db_connect.dart';
 void main() {
-  //var db = DBconnect();
+  // var db = DBconnect();
   // db.addQuestion(
-  //   Question(id:'3',title:'Worrying too much about different things', options:{
+  //   Question(id:'1',title:'How often do you ever experience unwanted repetitive and persistent thoughts that cause you anxiety?', options:{
   //     'Not at all':0,
   //     'Several days':1,
   //     'Nearly every day':2,}),
   // );
+  
+
 
   runApp(const MyApp());
 }

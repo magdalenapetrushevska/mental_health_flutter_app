@@ -1,174 +1,199 @@
 import 'package:flutter/material.dart';
-import '../models/db_connect.dart';
+import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
+import 'package:mental_health_flutter_app/screens/test_screen.dart';
 import '../constants.dart';
-import '../models/question_model.dart';
-import '../widgets/question_widget.dart';
-import '../widgets/next_button_widget.dart';
-import '../widgets/option_card.dart';
-import '../widgets/result_box.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key:key);
-
+class HomeScreen extends StatelessWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
-  var db = DBconnect();
-
-  late Future _questions;
-
-  Future<List<Question>> getData() async{
-    return db.fetchQuestions();
-  }
-
-  @override
-  void initState(){
-    _questions = getData();
-    super.initState();
-  }
-
-  //List<Question> _questions = [
-  //   Question(
-  //     id: '1',
-  //     title: 'Question 1 example',
-  //     options: {'5': false, '30':false, '4':true, '10':false},
-  //     ),
-  //     Question(
-  //     id: '2',
-  //     title: 'Question 2 example',
-  //     options: {'50': false, '30':true, '40':false, '10':false},
-  //     ),
-  // ];
-
-  int index = 0;
-  bool isPressed = false;
-  int pressedOption = 3;
-  int score = 0;
-  bool isAlreadySelected = false;
-
-  void nextQuestion(int questionLenght){
-    if(index == questionLenght-1){
-      showDialog(
-        context: context, 
-        barrierDismissible: false,
-      builder: (ctx)=>ResultBox(
-        result:score,
-        onPressed: startOver,
-      ));
-    } else{
-      if(isPressed){
-    setState(() {
-      index++;
-      isPressed = false;
-      pressedOption = 3;
-      isAlreadySelected = false;
-    });
-      } else{
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please select any option'),
-          behavior: SnackBarBehavior.floating,
-          margin:EdgeInsets.symmetric(vertical: 20.0),
-          ));
-      }
-    }
-  }
-
-  void checkAnswerAndUpdate(int value){
-    if(isAlreadySelected){
-      return;
-    }
-
-    score+=value;
-
-    setState(() {
-      pressedOption = value;
-      isPressed = true;
-      isAlreadySelected = true;
-    });
-  
-  }
-
-  void startOver(){
-    setState((){
-      index = 0;
-      score = 0;
-      isPressed = false;
-      pressedOption = 3;
-      isAlreadySelected = false;
-    });
-    Navigator.pop(context);
-  }
-
-  @override
-  Widget build(BuildContext context){
-    return FutureBuilder(
-      future: _questions as Future<List<Question>>,
-      builder: (ctx,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return Center(child:Text('${snapshot.error}'),);
-          } else if(snapshot.hasData){
-            var extractedData = snapshot.data as List<Question>;
-            return Scaffold(
-        backgroundColor:background,
-        appBar: AppBar(
-          title: const Text('Mental health test'),
-          backgroundColor: background,
-          shadowColor: Colors.transparent,
-          // actions: [
-          //   Padding(padding: const EdgeInsets.all(18.0),
-          //    child:Text('Score: $score',
-          //    style:const TextStyle(fontSize: 18.0)),),
-          // ],
-        ),
-        
-        body:Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          width: double.infinity,
-          child:Column(children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text('Over the last 2 weeks, how often have you been bothered by the following problems?'),
-            ),
-            SizedBox(height: 20.0,),
-            QuestionWidget(
-              question: extractedData[index].title, 
-              indexAction: index, 
-              totalQuestions: extractedData.length),
-              const Divider(color:neutral),
-              const SizedBox(height: 25.0),
-              for(int i=0;i<extractedData[index].options.length;i++)
-    
-                GestureDetector(
-                  onTap:()=>checkAnswerAndUpdate( extractedData[index].options.values.toList()[i]),
-                  child: OptionCard(option: extractedData[index].options.keys.toList()[i],
-                  color: isPressed ?  extractedData[index].options.values.toList()[i] == pressedOption ? chosen : notchosen : neutral,
-                  ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        backgroundColor: background,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                    Column(
+                  children: [
+                    IconButton(
+                      iconSize: 30,
+                      icon: const Icon(Icons.question_mark),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TestCategoryScreen()));
+                      },
+                    ),
+                  ],
                 ),
-          ],)
-        ),
-        floatingActionButton: GestureDetector(
-          onTap: () => nextQuestion(extractedData.length),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal:10.0),
-            child: NextButton(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 160,
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8.0, left: 8.0, top: 8.0, bottom: 2.5),
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(),
+                          child: Text(
+                            "Mood history",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TestCategoryScreen()));
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 170,
+                      height: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8.0, left: 8.0, bottom: 8.0, top: 2.5),
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(),
+                          child: Text(
+                            "Accomplishments",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TestCategoryScreen()));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, bottom: 30.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/images/avatar.jpg'),
+                          ),
+                          Text("Magdalena"),
+                          Text("Petrushevska"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Activities",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon:
+                          Image.asset('assets/images/home_page_activities.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RateYourMoodPage()));
+                        Navigator.push(context,
+      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+                      },
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Tests",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Image.asset('assets/images/home_page_tests.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                          Navigator.push(context,
+      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Motivation",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon:
+                          Image.asset('assets/images/home_page_motivation.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                        //MotivationPage
+                          Navigator.push(context,
+      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+                      },
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Articles",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Image.asset('assets/images/home_page_articles.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                          Navigator.push(context,
+      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
-          }
-        }
-        else{
-          return const Center(child:CircularProgressIndicator(),);
-        }
-        
-        return const Center(child:Text('No data'),);
-      },
-      
+      ),
     );
   }
 }
