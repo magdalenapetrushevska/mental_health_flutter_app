@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import './screens/home_screen.dart';
 import './models/db_connect.dart';
-import './models/db_connect.dart';
 void main() {
   var db = DBconnect();
   // db.addQuestion(
-  //   Question(id:'1',title:'Question 2 example', options:{
-  //     '500':true,
-  //     '700':false,
-  //     '900':false,
-  //     '800':false}),
+  //   Question(id:'3',title:'Worrying too much about different things', options:{
+  //     'Not at all':0,
+  //     'Several days':1,
+  //     'Nearly every day':2,}),
   // );
-  db.fetchQuestions();
+  
+  //db.fetchQuestions();
 
   runApp(const MyApp());
 }

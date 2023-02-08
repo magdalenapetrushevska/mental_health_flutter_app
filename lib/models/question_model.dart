@@ -1,7 +1,7 @@
 class Question{
   final String id;
   final String title;
-  final Map<String,bool> options;
+  final Map<String,int> options;
 
   Question({
     required this.id,

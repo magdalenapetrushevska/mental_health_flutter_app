@@ -75,13 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void checkAnswerAndUpdate(bool value){
+  void checkAnswerAndUpdate(int value){
     if(isAlreadySelected){
       return;
     }
-    if(value == true){
-      score++;
-    }
+    // if(value == true){
+    //   score++;
+    // }
+    score+=value;
+
     setState(() {
       isPressed = true;
       isAlreadySelected = true;
@@ -112,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Scaffold(
         backgroundColor:background,
         appBar: AppBar(
-          title: const Text('Quiz app'),
+          title: const Text('Mental health app'),
           backgroundColor: background,
           shadowColor: Colors.transparent,
           actions: [
@@ -136,8 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 GestureDetector(
                   onTap:()=>checkAnswerAndUpdate( extractedData[index].options.values.toList()[i]),
                   child: OptionCard(option: extractedData[index].options.keys.toList()[i],
-                  color: isPressed ?  extractedData[index].options.values.toList()[i]
-                   == true ? correct : incorrect : neutral,
                   ),
                 ),
           ],)
