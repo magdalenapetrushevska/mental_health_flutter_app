@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int index = 0;
   bool isPressed = false;
+  int pressedOption = 3;
   int score = 0;
   bool isAlreadySelected = false;
 
@@ -55,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
         barrierDismissible: false,
       builder: (ctx)=>ResultBox(
         result:score,
-        questionLenght: questionLenght,
         onPressed: startOver,
       ));
     } else{
@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       index++;
       isPressed = false;
+      pressedOption = 3;
       isAlreadySelected = false;
     });
       } else{
@@ -85,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     score+=value;
 
     setState(() {
+      pressedOption = value;
       isPressed = true;
       isAlreadySelected = true;
     });
@@ -96,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       index = 0;
       score = 0;
       isPressed = false;
+      pressedOption = 3;
       isAlreadySelected = false;
     });
     Navigator.pop(context);
@@ -138,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 GestureDetector(
                   onTap:()=>checkAnswerAndUpdate( extractedData[index].options.values.toList()[i]),
                   child: OptionCard(option: extractedData[index].options.keys.toList()[i],
+                  color: isPressed ?  extractedData[index].options.values.toList()[i] == pressedOption ? chosen : notchosen : neutral,
                   ),
                 ),
           ],)
@@ -164,4 +168,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

@@ -28,8 +28,6 @@ class DBconnect{
         newQuestions.add(newQuestion);
       });
       return newQuestions;
-
-      //print(newQuestions);
     });
   }
 
