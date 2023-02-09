@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
+import 'package:mental_health_flutter_app/models/quote_model.dart';
 import './question_model.dart';
 import 'dart:convert';
+import 'dart:math';
 
 class DBconnect{
 
@@ -12,6 +14,15 @@ class DBconnect{
   //     'options':question.options,
   //   }));
   // }
+
+    final quoteUrl = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+    Future<void> addQuote(Quote quote) async{
+    http.post(quoteUrl,
+    body: json.encode({
+      'content':quote.content,
+      'author':quote.author,
+    }));
+  }
 
   Future<List<Question>> fetchQuestions(String testCategory) async {
 
@@ -96,4 +107,90 @@ class DBconnect{
 
 
 
+
+
+
+  // Future<List<Quote>> fetchQuotes() async {
+
+    
+  //   final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+
+  //   return http.get(url).then((response){
+  //     var data = json.decode(response.body) as Map<String,dynamic>;
+  //     List<Quote> newQuotes = [];
+
+  //     data.forEach((key, value){
+  //       var newQuote =  Quote(
+  //         id: key,
+  //         content:value['content'],
+  //         author: value['athor'],
+  //       );
+
+  //       newQuotes.add(newQuote);
+  //     });
+  //     return newQuotes;
+  //   });
+ 
+  // }
+
+  // Future<Quote> fetchRandomQuote() async {
+  //   Future<List<Quote>> newQuotes = fetchQuotes() as Future<List<Quote>>;
+  //   Random random = Random();
+  //   int randomNumber = 0;
+  //   randomNumber = random.nextInt(newQuotes.length);
+  //   return newQuotes[randomNumber];
+
+  // }
+
+
+  Future<Quote> fetchRandomQuote() async {
+    
+    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+
+    return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<Quote> newQuotes = [];
+
+      data.forEach((key, value){
+        var newQuote =  Quote(
+          id: key,
+          content:value['content'],
+          author: value['author'],
+        );
+
+        //extractedData.forEach((profileId, profileData) {
+      // loadedProfile.add(
+      //   Profile(
+      //     email: profileData['email'],
+      //     lastName: profileData['firstName'],
+      //     firstName: profileData['lastName'],
+      //   ),
+
+        newQuotes.add(newQuote);
+      });
+
+      Random random = Random();
+      int randomNumber = 0;
+      randomNumber = random.nextInt(newQuotes.length);
+      return newQuotes[randomNumber];
+      //return newQuotes;
+    });
+ 
+  }
+
+
+
+
+
+
 }
+
+
+// Random random = Random();
+//   int randomNumber = 0;
+
+//   void _quotesGenerator() {
+//     setState(() {
+//       randomNumber = random.nextInt(quotes.length);
+//     });
+//   }

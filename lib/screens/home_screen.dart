@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
-import 'package:mental_health_flutter_app/screens/test_screen.dart';
+//import 'package:mental_health_flutter_app/screens/test_screen.dart';
 import '../constants.dart';
+import 'motivation_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -167,7 +168,7 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         //MotivationPage
                           Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+      MaterialPageRoute(builder: (context) => MotivationScreen()));
                       },
                     )
                   ],
