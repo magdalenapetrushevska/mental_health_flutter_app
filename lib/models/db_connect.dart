@@ -15,9 +15,9 @@ class DBconnect{
   //   }));
   // }
 
-    final quoteUrl = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
-    Future<void> addQuote(Quote quote) async{
-    http.post(quoteUrl,
+    Future<void> addFavoriteQuote(Quote quote) async{
+      final favoriteQuoteUrl = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+    http.post(favoriteQuoteUrl,
     body: json.encode({
       'content':quote.content,
       'author':quote.author,
@@ -106,32 +106,24 @@ class DBconnect{
   }
 
 
+  Future<bool> checkFavoriteQuoteExistence(String content) async {
 
-
-
-
-  // Future<List<Quote>> fetchQuotes() async {
-
+    bool ret = false;
     
-  //   final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
-  //   return http.get(url).then((response){
-  //     var data = json.decode(response.body) as Map<String,dynamic>;
-  //     List<Quote> newQuotes = [];
+    return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
 
-  //     data.forEach((key, value){
-  //       var newQuote =  Quote(
-  //         id: key,
-  //         content:value['content'],
-  //         author: value['athor'],
-  //       );
-
-  //       newQuotes.add(newQuote);
-  //     });
-  //     return newQuotes;
-  //   });
+      data.forEach((key, value){
+        if(value['content'] == content){
+          ret = true;
+        }
+      });
+      return ret;
+    });
  
-  // }
+  }
 
   // Future<Quote> fetchRandomQuote() async {
   //   Future<List<Quote>> newQuotes = fetchQuotes() as Future<List<Quote>>;
@@ -181,6 +173,28 @@ class DBconnect{
 
 
 
+Future<List<Quote>> fetchFavoriteQuotes() async {
+
+    
+      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+
+   return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<Quote> newQuotes = [];
+
+      data.forEach((key, value){
+        var newQuote =  Quote(
+          id: key,
+          content:value['content'],
+          author: value['author'],
+        );
+
+        newQuotes.add(newQuote);
+      });
+      return newQuotes;
+    });
+
+
 
 
 }
@@ -194,3 +208,15 @@ class DBconnect{
 //       randomNumber = random.nextInt(quotes.length);
 //     });
 //   }
+
+
+
+
+
+    
+}
+   
+  
+
+
+

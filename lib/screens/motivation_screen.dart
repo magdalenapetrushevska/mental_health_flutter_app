@@ -22,9 +22,16 @@ class _MotivationScreenState extends State<MotivationScreen> {
 
   late Future _quote;
 
-  // Future<List<Quote>> getData() async{
-  //   return db.fetchQuotes();
-  // }
+
+  var favorites = <Quote>[];
+
+
+  Future<void> toggleFavorite(String content, String author) async {
+    bool alreadyExist = await db.checkFavoriteQuoteExistence(content);
+    if(alreadyExist==false){
+        db.addFavoriteQuote(Quote(id:'1',content:content,author: author));
+    }
+  }
 
   Future<Quote> getData() async{
     return db.fetchRandomQuote();
@@ -44,7 +51,7 @@ class _MotivationScreenState extends State<MotivationScreen> {
     Navigator.canPop(context);
   }
 
-
+IconData icon = Icons.favorite;
 
 
   @override
@@ -73,12 +80,33 @@ class _MotivationScreenState extends State<MotivationScreen> {
         body:Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           width: double.infinity,
-          child:Column(children: [
+          child:Column(
+            children: [
             const SizedBox(height: 40.0,),
             QuoteWidget(
               content: extractedData.content, 
               author: extractedData.author, 
             ),
+            SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  toggleFavorite(extractedData.content,extractedData.author);
+                },
+                icon: Icon(icon),
+                label: Text('Like'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  nextQuote();
+                },
+                child: Text('Next'),
+              ),
+            ],
+          ),
              
           ],)
         ),
