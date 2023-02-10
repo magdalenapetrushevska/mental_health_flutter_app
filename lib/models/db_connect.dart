@@ -4,6 +4,8 @@ import './question_model.dart';
 import 'dart:convert';
 import 'dart:math';
 
+import 'article_model.dart';
+
 class DBconnect{
 
   //final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/ocd_questions.json');
@@ -14,6 +16,43 @@ class DBconnect{
   //     'options':question.options,
   //   }));
   // }
+
+
+  Future<void> addArticle(Article article) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
+    http.post(url,
+        body: json.encode({
+          'title': article.title,
+          'content': article.content,
+          'imageUrl': article.imageUrl,
+        }));
+  }
+
+
+
+Future<List<Article>> fetchArticles() async {
+    
+      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
+
+   return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<Article> newArticles = [];
+
+      data.forEach((key, value){
+        var newQuote =  Article(
+          id: key,
+          title: value['title'],
+          content:value['content'],
+          imageUrl: value['imageUrl'],
+        );
+
+        newArticles.add(newQuote);
+      });
+      return newArticles;
+    });
+
+}
 
     Future<void> addFavoriteQuote(Quote quote) async{
       final favoriteQuoteUrl = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
@@ -193,9 +232,6 @@ Future<List<Quote>> fetchFavoriteQuotes() async {
       });
       return newQuotes;
     });
-
-
-
 
 }
 
