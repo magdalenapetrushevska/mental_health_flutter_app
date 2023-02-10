@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
 //import 'package:mental_health_flutter_app/screens/test_screen.dart';
 import '../constants.dart';
+import 'articles_screen.dart';
+import 'example_testing_screen.dart';
 import 'motivation_layout_screen.dart';
 import 'motivation_screen.dart';
 
@@ -186,7 +188,7 @@ class HomeScreen extends StatelessWidget {
                       iconSize: 150,
                       onPressed: () {
                           Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+      MaterialPageRoute(builder: (context) => ArticlesScreen()));
                       },
                     ),
                   ],
