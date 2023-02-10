@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'article_model.dart';
+import 'mood_model.dart';
 
 class DBconnect{
 
@@ -16,6 +17,16 @@ class DBconnect{
   //     'options':question.options,
   //   }));
   // }
+
+    Future<void> addMood(Mood mood) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
+    http.post(url,
+        body: json.encode({
+          'mood': mood.mood,
+          'datetime': mood.datetime,
+        }));
+  }
 
 
   Future<void> addArticle(Article article) async {
@@ -30,6 +41,27 @@ class DBconnect{
   }
 
 
+Future<List<Mood>> fetchMoods() async {
+    
+      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
+
+   return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<Mood> newMoods = [];
+
+      data.forEach((key, value){
+        var newMood =  Mood(
+          id: key,
+          mood: value['mood'],
+          datetime:value['datetime'],
+        );
+
+        newMoods.add(newMood);
+      });
+      return newMoods;
+    });
+
+}
 
 Future<List<Article>> fetchArticles() async {
     

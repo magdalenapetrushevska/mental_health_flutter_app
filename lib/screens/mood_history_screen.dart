@@ -1,51 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
+import '../constants.dart';
+
+//class MoodHistoryPage extends StatelessWidget {
+
+import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/models/article_model.dart';
 import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../models/db_connect.dart';
+import '../models/mood_model.dart';
+import '../widgets/mood_widget.dart';
 
 
 
 //fetchArticles
-class ArticlesScreen extends StatefulWidget {
- const ArticlesScreen({Key? key,
+class MoodHistoryScreen extends StatefulWidget {
+ const MoodHistoryScreen({Key? key,
   }) : super(key:key);
 
   @override
-  _ArticlesScreenState createState() => _ArticlesScreenState();
+  _MoodHistoryScreenState createState() => _MoodHistoryScreenState();
 }
 
-class _ArticlesScreenState extends State<ArticlesScreen> {
+class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
 
-  _ArticlesScreenState();
+  _MoodHistoryScreenState();
 
  var db = DBconnect();
 
-  late Future _articles;
+  late Future _moods;
 
-  Future<List<Article>> getData() async{
-    return db.fetchArticles();
+  Future<List<Mood>> getData() async{
+    return db.fetchMoods();
   }
 
   @override
   void initState(){
-    _articles = getData();
+    _moods = getData();
     super.initState();
   }
-
-   int index = 0;
-
 
   @override
   Widget build(BuildContext context) {
         return FutureBuilder(
-      future: _articles as Future<List<Article>>,
+      future: _moods as Future<List<Mood>>,
       builder: (ctx,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return Center(child:Text('${snapshot.error}'),);
           } else if(snapshot.hasData){
-            var extractedData = snapshot.data as List<Article>;
+            var extractedData = snapshot.data as List<Mood>;
                 return Scaffold(
         body: NestedScrollView(
             floatHeaderSlivers: true,
@@ -53,11 +58,27 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  title: const Text('Articles'),
+                  title: const Text('Mood history'),
                   backgroundColor: background,
                   floating: true,
                   expandedHeight: 70.0,
                   forceElevated: innerBoxIsScrolled,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 100,
+                        child:
+            ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const RateMoodScreen()));
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('New mood'),
+              ),
+                      ),
+                    ),
+          ],
                 ),
               ];
             },
@@ -65,10 +86,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 padding: const EdgeInsets.all(8),
                 itemCount: extractedData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ArticleWidget(
-                    title: extractedData[index].title,
-                    content:extractedData[index].content,
-                    imageUrl: extractedData[index].imageUrl,
+                  return MoodWidget(
+                    mood: extractedData[index].mood,
+                    datetime:extractedData[index].datetime,
                   );
                 })));
           }

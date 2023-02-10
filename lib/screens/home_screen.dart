@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mental_health_flutter_app/screens/mood_history_screen.dart';
+import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
 //import 'package:mental_health_flutter_app/screens/test_screen.dart';
 import '../constants.dart';
@@ -8,6 +10,8 @@ import 'motivation_layout_screen.dart';
 import 'motivation_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                             right: 8.0, left: 8.0, top: 8.0, bottom: 2.5),
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(),
-                          child: Text(
+                          child: const Text(
                             "Mood history",
                             style: TextStyle(
                               color: Colors.black,
@@ -57,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TestCategoryScreen()));
+                                    builder: (context) => const MoodHistoryScreen()));
                           },
                         ),
                       ),
@@ -70,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                             right: 8.0, left: 8.0, bottom: 8.0, top: 2.5),
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(),
-                          child: Text(
+                          child: const Text(
                             "Accomplishments",
                             style: TextStyle(
                               color: Colors.black,
@@ -119,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Activities",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -128,9 +132,8 @@ class HomeScreen extends StatelessWidget {
                           Image.asset('assets/images/home_page_activities.png'),
                       iconSize: 150,
                       onPressed: () {
-                        //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>RateYourMoodPage()));
                         Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
+      MaterialPageRoute(builder: (context) => RateMoodScreen()));
                       },
                     )
                   ],
@@ -138,7 +141,7 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Tests",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -160,7 +163,7 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Motivation",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -179,7 +182,7 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Articles",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -188,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                       iconSize: 150,
                       onPressed: () {
                           Navigator.push(context,
-      MaterialPageRoute(builder: (context) => ArticlesScreen()));
+      MaterialPageRoute(builder: (context) => const ArticlesScreen()));
                       },
                     ),
                   ],
