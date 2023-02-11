@@ -6,6 +6,7 @@ import 'package:mental_health_flutter_app/screens/home_screen.dart';
 import './models/db_connect.dart';
 import 'models/mood_model.dart';
 import 'models/quote_model.dart';
+import './constants.dart';
 //import 'models/quote_model.dart';
 void main() {
    var db = DBconnect();
@@ -23,8 +24,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.purple),
+
+	    darkTheme: ThemeData.dark(),
+	    themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home:  HomeScreen(),
+      home:  const HomeScreen(),
     );
   }
 }
