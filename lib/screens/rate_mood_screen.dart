@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mental_health_flutter_app/models/mood_model.dart';
 import '../constants.dart';
 import '../models/db_connect.dart';
+import 'activities_screen.dart';
 import 'example_testing_screen.dart';
 
 class RateMoodScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class RateMoodScreen extends StatefulWidget {
 }
 
 class _RateMoodScreenState extends State<RateMoodScreen> {
+    int moodCategory = 0;
     var now = DateTime.now();
     var formatter =  DateFormat('yyyy-MM-dd');
     String formattedDate ='';
@@ -27,8 +29,18 @@ class _RateMoodScreenState extends State<RateMoodScreen> {
         id: '1',
         mood: mood,
         datetime: DateFormat('dd-MM-yyyy').format(DateTime.now())));
+
+    if(mood =='great' || mood == 'good'){
+          moodCategory = 1;
+    }
+    else if(mood =='bad' || mood == 'awful'){
+          moodCategory = 2;
+    } else{
+      moodCategory = 3;
+    }
+
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const ExampleTestingScreen()));
+        MaterialPageRoute(builder: (context) => ActivityScreen(moodCategory: moodCategory)));
   }
 
 

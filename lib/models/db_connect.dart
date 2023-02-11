@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:mental_health_flutter_app/models/activity.dart';
 import 'package:mental_health_flutter_app/models/quote_model.dart';
 import './question_model.dart';
 import 'dart:convert';
@@ -9,14 +10,20 @@ import 'mood_model.dart';
 
 class DBconnect{
 
-  //final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/ocd_questions.json');
-  //   Future<void> addQuestion(Question question) async{
-  //   http.post(url,
-  //   body: json.encode({
-  //     'title':question.title,
-  //     'options':question.options,
-  //   }));
-  // }
+
+
+
+    Future<void> addActivity(Activity activty) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/activities.json');
+    http.post(url,
+        body: json.encode({
+          'title': activty.title,
+          'moodCategory': activty.moodCategory,
+        }));
+  }
+
+
 
     Future<void> addMood(Mood mood) async {
     final url = Uri.parse(
@@ -38,6 +45,37 @@ class DBconnect{
           'content': article.content,
           'imageUrl': article.imageUrl,
         }));
+  }
+
+  Future<List<Activity>> fetchActivities(int mood) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/activities.json');
+
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
+      List<Activity> newActivities = [];
+
+      data.forEach((key, value) {
+        if (mood == value['moodCategory']) {
+          var newActivity = Activity(
+            id: key,
+            title: value['title'],
+            moodCategory: value['moodCategory'],
+          );
+
+          newActivities.add(newActivity);
+        }
+      });
+      List<Activity> recommendedActivities = [];
+      Random random = Random();
+      int randomNumber = 0;
+      for (int i = 0; i <= 3; i++) {
+        randomNumber = random.nextInt(newActivities.length);
+        recommendedActivities.add(newActivities[randomNumber]);
+      }
+      
+      return recommendedActivities;
+    });
   }
 
 
