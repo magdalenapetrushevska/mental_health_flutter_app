@@ -11,7 +11,7 @@ class Activity{
 
   @override
   String toString() {
-    return 'Question(id: $id, title: $title, moodCateogry: $moodCategory)';
+    return 'Activity(id: $id, title: $title, moodCateogry: $moodCategory)';
   }
 
 }

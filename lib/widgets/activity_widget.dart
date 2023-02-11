@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class ActivityWidget extends StatelessWidget{
-  const ActivityWidget({Key? key, required this.title,}): super(key:key);
+  const ActivityWidget({Key? key, required this.activityId,required this.title,}): super(key:key);
+  final String activityId;
   final String title;
 
 
 @override
 Widget build(BuildContext context){
   return SizedBox(
-            width: 130,
-            height: 55,
+            width: 300,
+            height: 70,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: OutlinedButton(
@@ -21,14 +22,14 @@ Widget build(BuildContext context){
                 ),
                 child:  Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          ActivityInfoScreen(title:title)));
+                          ActivityInfoScreen(activityId:activityId,title:title)));
                 },
               ),
             ),

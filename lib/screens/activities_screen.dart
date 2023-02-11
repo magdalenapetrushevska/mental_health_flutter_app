@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/models/article_model.dart';
+import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../models/activity.dart';
@@ -71,15 +72,22 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               ];
             },
-            body: ListView.builder(
+            body:ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: extractedData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return
+                  return Column(children: [
                       ActivityWidget(
+                        activityId: extractedData[index].id,
                     title: extractedData[index].title,
-                  );
-                })));
+                  ),
+                  ],);
+                }
+                ),
+                
+             
+                ),
+                );
           }
         }
         else{

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/mood_history_screen.dart';
+import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
 //import 'package:mental_health_flutter_app/screens/test_screen.dart';
@@ -75,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(),
                           child: const Text(
-                            "Accomplishments",
+                            "My activities",
                             style: TextStyle(
                               color: Colors.black,
                             ),
@@ -84,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TestCategoryScreen()));
+                                    builder: (context) =>const  MyActivitiesScreen()));
                           },
                         ),
                       ),

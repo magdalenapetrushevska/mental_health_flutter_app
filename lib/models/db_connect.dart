@@ -6,11 +6,24 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'article_model.dart';
+import 'completed_activity.dart';
 import 'mood_model.dart';
 
 class DBconnect{
 
 
+
+
+Future<void> updateMood(String moodId, Mood mood) async {
+    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods/$moodId.json');
+    http.put(
+      url,
+      body: json.encode({
+        'mood': mood.mood,
+        'datetime': mood.datetime,
+      }),
+    );
+  }
 
 
     Future<void> addActivity(Activity activty) async {
@@ -22,7 +35,53 @@ class DBconnect{
           'moodCategory': activty.moodCategory,
         }));
   }
+  
+  
+    Future<void> addCompletedActivity(CompletedActivity activity) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
+    http.post(url,
+        body: json.encode({
+          'title': activity.title,
+          'isCompleted': activity.isCompleted,
+        }));
+  }
 
+Future<List<CompletedActivity>> fetchCompltedActivities() async {
+    
+      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
+
+   return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<CompletedActivity> newCompltedActivities = [];
+
+      data.forEach((key, value){
+        var newCompltedActivity =  CompletedActivity(
+          id: key,
+          title: value['title'],
+          isCompleted:value['isCompleted'],
+        );
+
+        newCompltedActivities.add(newCompltedActivity);
+      });
+      //print(newCompltedActivities);
+      return newCompltedActivities;
+    });
+
+}
+
+
+
+  Future<void> updateCompletedActivtiy(String activityId,String title) async {
+    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
+    http.put(
+      url,
+      body: json.encode({
+        'title': title,
+        'isCompleted': 'true',
+      }),
+    );
+  }
 
 
     Future<void> addMood(Mood mood) async {
