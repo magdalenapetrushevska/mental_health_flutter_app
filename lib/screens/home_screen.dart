@@ -9,9 +9,19 @@ import 'articles_screen.dart';
 import 'example_testing_screen.dart';
 import 'motivation_layout_screen.dart';
 import 'motivation_screen.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  void sending_SMS(String msg, List<String> list_receipents) async {
+    String send_result =
+        await sendSMS(message: msg, recipients: list_receipents)
+            .catchError((err) {
+      print(err);
+    });
+    print(send_result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +39,11 @@ class HomeScreen extends StatelessWidget {
               children: [
                     Column(
                   children: [
-                    IconButton(
-                      iconSize: 30,
-                      icon: const Icon(Icons.question_mark),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TestCategoryScreen()));
-                      },
-                    ),
+                    FloatingActionButton(
+        onPressed: () => sending_SMS('This is a mental health emergency message. The person that sends this message requires your help.', ['123456789',]),
+        tooltip: 'Send SMS',
+        child: const Icon(Icons.emergency),
+      ), 
                   ],
                 ),
                 Column(
