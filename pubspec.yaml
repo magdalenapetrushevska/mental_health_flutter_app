@@ -42,6 +42,8 @@ dependencies:
   flutter_tts: ^3.6.3
   intl: ^0.18.0
   flutter_sms: ^2.3.3
+  geolocator: ^9.0.2
+  geocoding: ^2.0.5
 
 dev_dependencies:
   flutter_test:
