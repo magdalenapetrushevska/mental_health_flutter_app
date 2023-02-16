@@ -20,9 +20,12 @@ class ArticleWidget extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
@@ -41,17 +44,25 @@ class ArticleWidget extends StatelessWidget {
                 child: const Text(
                   "Read more",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          ReadArticleScreen(title:title, content: content)));
+                          ReadArticleScreen(title:title, content: content,image:imageUrl)));
                 },
               ),
             ),
           ),
+          const Divider(
+                                  //color: Colors.black,
+                                  height: 25,
+                                  thickness: 2,
+                                  indent: 25,
+                                  endIndent: 25,
+                                ),
+                                SizedBox(height: 20.0,),
         ],
       ),
     );

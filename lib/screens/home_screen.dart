@@ -3,16 +3,14 @@ import 'package:mental_health_flutter_app/screens/mood_history_screen.dart';
 import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
-//import 'package:mental_health_flutter_app/screens/test_screen.dart';
 import '../constants.dart';
+import '../db_connection/db_connect.dart';
 import 'articles_screen.dart';
-import 'example_testing_screen.dart';
 import 'motivation_layout_screen.dart';
-import 'motivation_screen.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 // class HomeScreen extends StatelessWidget {
 //    HomeScreen({super.key});
@@ -30,12 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String Address = 'search';
 
 
-  
+ var db = DBconnect();
+
+
   @override
-  void initState() {
-    //initLocation();
+  void initState(){
     super.initState();
   }
+
+
+
 
   Future<void> initLocation() async{
     Position position = await  _getGeoLocationPosition();
@@ -104,12 +106,6 @@ Future<Position> _getGeoLocationPosition() async {
 
 
 void onPressed() async {
-  // await downloadWallpaperFile(wallpaperID, path: path).then((result) {
-  //   ///Check if download was successful
-  //   if (result == 0) {
-  //     ///Change wallpaper
-  //     AndroidInterface.setWallpaper(path);
-  //   }
     Position position = await _getGeoLocationPosition();
     location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
     await GetAddressFromLatLong(position).then((result){
@@ -137,16 +133,18 @@ void onPressed() async {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                    Column(
-                  children: [
-                    FloatingActionButton(
-        onPressed: onPressed,
-        //sending_SMS('This is a mental health emergency message. The person that sends this message requires your help.', ['123456789',]),
-        tooltip: 'Send SMS',
-        child: const Icon(Icons.emergency),
-      ), 
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(.0),
+                  child: Column(
+                    children: [
+                      FloatingActionButton(
+                        onPressed: onPressed,
+                        tooltip: 'Send SMS',
+                        child: const Icon(Icons.local_hospital),
+                      ),
+                    ],
                 ),
+                    ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -44,6 +44,7 @@ dependencies:
   flutter_sms: ^2.3.3
   geolocator: ^9.0.2
   geocoding: ^2.0.5
+  flutter_email_sender: ^5.2.0
 
 dev_dependencies:
   flutter_test:

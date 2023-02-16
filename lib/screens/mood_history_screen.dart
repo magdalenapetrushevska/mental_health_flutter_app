@@ -1,17 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
-import '../constants.dart';
-
-//class MoodHistoryPage extends StatelessWidget {
-
-import 'package:flutter/material.dart';
-import 'package:mental_health_flutter_app/models/article_model.dart';
-import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../db_connection/db_connect.dart';
 import '../models/mood_model.dart';
 import '../widgets/mood_widget.dart';
-
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 
 //fetchArticles
@@ -28,12 +23,32 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
   _MoodHistoryScreenState();
 
  var db = DBconnect();
+ String emailBodyContent = 'The following is the list of history mood:\n\n';
 
   late Future _moods;
 
   Future<List<Mood>> getData() async{
     return db.fetchMoods();
   }
+
+
+  generateEmailBodyContent(){
+    
+
+  }
+
+  void sendEmail() async {
+  final Email send_email = Email(
+  body: emailBodyContent,
+  subject: 'subject of email',
+  recipients: ['magdalenapetrusevska9@gmail.com'],
+  isHTML: false,
+);
+
+await FlutterEmailSender.send(send_email);
+}
+
+
 
   @override
   void initState(){
@@ -51,6 +66,10 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
             return Center(child:Text('${snapshot.error}'),);
           } else if(snapshot.hasData){
             var extractedData = snapshot.data as List<Mood>;
+            for(int i=0;i<extractedData.length;i++){
+              emailBodyContent+='Date: ${extractedData[i].datetime}  Mood: ${extractedData[i].mood}';
+              emailBodyContent+='\n';
+            }
                 return Scaffold(
         body: NestedScrollView(
             floatHeaderSlivers: true,
@@ -61,36 +80,52 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
                   title: const Text('Mood history'),
                   backgroundColor: background,
                   floating: true,
-                  expandedHeight: 70.0,
+                  expandedHeight: 200.0,
                   forceElevated: innerBoxIsScrolled,
                   actions: [
+                    
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                        width: 100,
+                        width: 60,
                         child:
             ElevatedButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const RateMoodScreen()));
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('New mood'),
+                label: const Text(''),
               ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 60,
+                        child:
+            ElevatedButton.icon(
+                onPressed: sendEmail,
+                icon: const Icon(Icons.email),
+                label: const Text(''),
+              ),
+                      ),
+                    ),
+                    
           ],
+          
                 ),
               ];
             },
-            body: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: extractedData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return MoodWidget(
-                    mood: extractedData[index].mood,
-                    datetime:extractedData[index].datetime,
-                  );
-                })));
+            body:  ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: extractedData.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return MoodWidget(
+                      mood: extractedData[index].mood,
+                      datetime:extractedData[index].datetime,
+                    );
+                  }),
+));
           }
         }
         else{
