@@ -1,13 +1,13 @@
 import 'package:http/http.dart' as http;
 import 'package:mental_health_flutter_app/models/activity.dart';
 import 'package:mental_health_flutter_app/models/quote_model.dart';
-import './question_model.dart';
+import '../models/question_model.dart';
 import 'dart:convert';
 import 'dart:math';
 
-import 'article_model.dart';
-import 'completed_activity.dart';
-import 'mood_model.dart';
+import '../models/article_model.dart';
+import '../models/completed_activity.dart';
+import '../models/mood_model.dart';
 
 class DBconnect{
 

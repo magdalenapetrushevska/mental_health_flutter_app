@@ -3,7 +3,7 @@ import 'package:mental_health_flutter_app/models/article_model.dart';
 import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../models/completed_activity.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 import '../widgets/my_activity_widget.dart';
 
 //fetchArticles

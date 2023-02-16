@@ -4,7 +4,7 @@ import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../models/activity.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 import '../widgets/activity_widget.dart';
 
 

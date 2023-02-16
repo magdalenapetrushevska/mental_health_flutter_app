@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/home_screen.dart';
 import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import '../constants.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 
 
 

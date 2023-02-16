@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mental_health_flutter_app/models/mood_model.dart';
 import '../constants.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 import 'activities_screen.dart';
 import 'example_testing_screen.dart';
 

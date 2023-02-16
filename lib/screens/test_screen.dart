@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 import '../constants.dart';
 import '../models/question_model.dart';
 import '../widgets/question_widget.dart';

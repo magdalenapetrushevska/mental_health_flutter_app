@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/db_connect.dart';
+import '../db_connection/db_connect.dart';
 import '../constants.dart';
 import '../models/quote_model.dart';
 import '../widgets/next_quote_button_widget.dart';
