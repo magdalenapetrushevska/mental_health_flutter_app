@@ -23,11 +23,12 @@ class QuoteWidget extends StatelessWidget{
               color:neutral,
             ),
             ),
-            Text(author,
+            const SizedBox(height:20.0),
+            Text('- '+ author,
             style:const TextStyle(
-              fontSize: 24,
-              color:neutral,
-            
+              fontSize: 20,
+              color:Color.fromARGB(255, 14, 18, 37),
+            fontStyle: FontStyle.italic,
             ),
             ),
         ],

@@ -54,26 +54,31 @@ class _ReadArticleScreenState extends State<ReadArticleScreen> {
           SliverAppBar(
             title: Text(title),
             floating: true,
-            expandedHeight: 120.0,
+            expandedHeight: 70.0,
             forceElevated: innerBoxIsScrolled,
           ),
         ];
       },
-      body:  Column(
-        children: [
-          Image.network(image,),
-          SizedBox(height:20.0),
-          Text(content,style: TextStyle(fontSize: 18),),
-          const SizedBox(height:20.0),
-          ElevatedButton(
-            onPressed: () => onPressed(),
-            child: const Text('Start text to speech'),
-          ),
-          ElevatedButton(
-            onPressed: () => stopSpeaking(),
-            child: const Text('Stop'),
-          ),
-        ],
+      body:  Container(
+        child: Column(
+          children: [
+            //Image.network(image,),
+            SizedBox(height:20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(content,style: TextStyle(fontSize: 18),),
+            ),
+            const SizedBox(height:20.0),
+            ElevatedButton(
+              onPressed: () => onPressed(),
+              child: const Text('Start text to speech'),
+            ),
+            ElevatedButton(
+              onPressed: () => stopSpeaking(),
+              child: const Text('Stop'),
+            ),
+          ],
+        ),
       )),
     );
   }

@@ -13,13 +13,13 @@ class TestCategoryScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "Choose a category:",
               style: TextStyle(fontSize: 22),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             SizedBox(
-              width: 200,
+              width: 250,
               height: 80,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -44,7 +44,7 @@ class TestCategoryScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 200,
+              width: 250,
               height: 80,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -66,7 +66,7 @@ class TestCategoryScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 200,
+              width: 250,
               height: 80,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -88,7 +88,7 @@ class TestCategoryScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 200,
+              width: 250,
               height: 80,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
