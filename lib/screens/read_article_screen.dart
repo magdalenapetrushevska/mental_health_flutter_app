@@ -64,7 +64,7 @@ class _ReadArticleScreenState extends State<ReadArticleScreen> {
           Image.network(image,),
           SizedBox(height:20.0),
           Text(content,style: TextStyle(fontSize: 18),),
-          SizedBox(height:20.0),
+          const SizedBox(height:20.0),
           ElevatedButton(
             onPressed: () => onPressed(),
             child: const Text('Start text to speech'),
