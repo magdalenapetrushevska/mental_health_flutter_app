@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:http/http.dart';
 
 class ReadArticleScreen extends StatefulWidget {
   const ReadArticleScreen({
@@ -16,13 +15,13 @@ class ReadArticleScreen extends StatefulWidget {
 
   @override
   _ReadArticleScreenState createState() =>
-      _ReadArticleScreenState(title: title, content: content,image:image);
+      _ReadArticleScreenState(title: title, content: content, image: image);
 }
 
 class _ReadArticleScreenState extends State<ReadArticleScreen> {
-  var title;
-  var content;
-  var image;
+  var title = '';
+  var content = '';
+  var image = '';
 
   _ReadArticleScreenState({
     required this.title,
@@ -32,9 +31,8 @@ class _ReadArticleScreenState extends State<ReadArticleScreen> {
 
   final FlutterTts flutterTts = FlutterTts();
 
-
-  void stopSpeaking() async{
-      await flutterTts.stop();
+  void stopSpeaking() async {
+    await flutterTts.stop();
   }
 
   void onPressed() async {
@@ -46,40 +44,39 @@ class _ReadArticleScreenState extends State<ReadArticleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-          //scrollDirection: Axis.horizontal,
-      floatHeaderSlivers: true,
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return <Widget>[
-          SliverAppBar(
-            title: Text(title),
-            floating: true,
-            expandedHeight: 70.0,
-            forceElevated: innerBoxIsScrolled,
-          ),
-        ];
-      },
-      body:  Container(
-        child: Column(
-          children: [
-            //Image.network(image,),
-            SizedBox(height:20.0),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(content,style: TextStyle(fontSize: 18),),
-            ),
-            const SizedBox(height:20.0),
-            ElevatedButton(
-              onPressed: () => onPressed(),
-              child: const Text('Start text to speech'),
-            ),
-            ElevatedButton(
-              onPressed: () => stopSpeaking(),
-              child: const Text('Stop'),
-            ),
-          ],
-        ),
-      )),
+      body: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                title: Text(title),
+                floating: true,
+                expandedHeight: 70.0,
+                forceElevated: innerBoxIsScrolled,
+              ),
+            ];
+          },
+          body: Column(
+            children: [
+              const SizedBox(height: 20.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  content,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () => onPressed(),
+                child: const Text('Start text to speech'),
+              ),
+              ElevatedButton(
+                onPressed: () => stopSpeaking(),
+                child: const Text('Stop'),
+              ),
+            ],
+          )),
     );
   }
 }

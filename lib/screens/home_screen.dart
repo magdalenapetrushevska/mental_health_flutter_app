@@ -14,9 +14,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-// class HomeScreen extends StatelessWidget {
-//    HomeScreen({super.key});
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -25,50 +22,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
- String location ='Null, Press Button';
-  String Address = 'search';
+  String location = 'Null, Press Button';
+  String address = 'search';
   String emergencyPhone = '';
   String psychotherapistEmail = '';
   String contactId = '';
 
-
-
- var db = DBconnect();
+  var db = DBconnect();
 
   late Future _contact;
 
-  Future<List<ContactSettings>> getData() async{
+  Future<List<ContactSettings>> getData() async {
     return db.fetchContact();
   }
 
-
   @override
-  void initState(){
+  void initState() {
     _contact = getData();
     super.initState();
   }
 
-
-
-
-  Future<void> initLocation() async{
-    Position position = await  _getGeoLocationPosition();
-              location ='Lat: ${position.latitude} , Long: ${position.longitude}';
-              GetAddressFromLatLong(position);
+  Future<void> initLocation() async {
+    Position position = await _getGeoLocationPosition();
+    location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+    getAddressFromLatLong(position);
   }
 
-
-Future<Position> _getGeoLocationPosition() async {
+  Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       await Geolocator.openLocationSettings();
       return Future.error('Location services are disabled.');
     }
@@ -77,35 +62,28 @@ Future<Position> _getGeoLocationPosition() async {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
-  Future<void> GetAddressFromLatLong(Position position)async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+  Future<void> getAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
     Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-    setState(()  {
-    });
+    address =
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    setState(() {});
   }
-
 
   void sending_SMS(String msg, List<String> list_receipents) async {
     String send_result =
@@ -116,29 +94,24 @@ Future<Position> _getGeoLocationPosition() async {
     print(send_result);
   }
 
-
-
-void onPressed() async {
+  void onPressed() async {
     Position position = await _getGeoLocationPosition();
     location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
-    await GetAddressFromLatLong(position).then((result){
-    sending_SMS(
-        'This is a mental health emergency message.\n The person that sends this message requires your help. \n\n Location: $Address' ,
-        [
-          '123456789',
-        ]);
+    await getAddressFromLatLong(position).then((result) {
+      sending_SMS(
+          'This is a mental health emergency message.\n The person that sends this message requires your help. \n\n Location: $address',
+          [
+            '123456789',
+          ]);
     });
   }
 
-  //   String emergencyPhone = '';
-  // String psychotherapistEmail = '';
-
-void changeSettings() {
+  void changeSettings() {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (ctx) => ContactSettingsBox(
-          contactId:contactId,
+              contactId: contactId,
               phone: emergencyPhone,
               email: psychotherapistEmail,
               onPressed: () {
@@ -148,209 +121,234 @@ void changeSettings() {
                         builder: (context) => const HomeScreen()));
               },
             ));
-            
   }
 
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: _contact as Future<List<ContactSettings>>,
-      builder: (ctx,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return Center(child:Text('${snapshot.error}'),);
-          } else if(snapshot.hasData){
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else if (snapshot.hasData) {
             var extractedData = snapshot.data as List<ContactSettings>;
-            for(int i=0;i<extractedData.length;i++){
+            for (int i = 0; i < extractedData.length; i++) {
               contactId = extractedData[i].id;
               emergencyPhone = extractedData[i].phone;
               psychotherapistEmail = extractedData[i].email;
             }
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        backgroundColor: background,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Home'),
+                backgroundColor: background,
+              ),
+              body: Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
-Padding(
-                      padding: const EdgeInsets.only(left: 20.0,),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MoodHistoryScreen()));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30.0, vertical: 15.0),
-                          primary: Colors.deepPurpleAccent,
-                          shape: StadiumBorder(),
-                        ),
-                        child: Text(
-                          "Mood history",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15.0,),
-                    ElevatedButton(
-                      onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MyActivitiesScreen()));
-                          },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 15.0),
-                        primary: Colors.deepPurpleAccent,
-                        shape: StadiumBorder(),
-                      ),
-                      child: Text(
-                        "My activities",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-
-                  ],
-                ),
-                Column(
-                  children: [
-                    Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FloatingActionButton(
-                          backgroundColor: Colors.red,
-                          onPressed: onPressed,
-                          tooltip: 'Send SMS',
-                          child: const Icon(Icons.local_hospital),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20.0,
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MoodHistoryScreen()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30.0, vertical: 15.0),
+                                  primary: Colors.deepPurpleAccent,
+                                  shape: const StadiumBorder(),
+                                ),
+                                child: const Text(
+                                  "Mood history",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15.0,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MyActivitiesScreen()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0, vertical: 15.0),
+                                primary: Colors.deepPurpleAccent,
+                                shape: const StadiumBorder(),
+                              ),
+                              child: const Text(
+                                "My activities",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Column(
+                              children: [
+                                FloatingActionButton(
+                                  backgroundColor: Colors.red,
+                                  onPressed: onPressed,
+                                  tooltip: 'Send SMS',
+                                  child: const Icon(Icons.local_hospital),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                children: [
+                                  FloatingActionButton(
+                                    onPressed: changeSettings,
+                                    tooltip: 'Send SMS',
+                                    child: const Icon(Icons.settings),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                        Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          FloatingActionButton(
-                            onPressed: changeSettings,
-                            tooltip: 'Send SMS',
-                            child: const Icon(Icons.settings),
-                          ),
-                        ],
+                    const SizedBox(
+                      height: 30.0,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Activities",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18.0),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'assets/images/activities_icon_final.png'),
+                              iconSize: 150,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RateMoodScreen()));
+                              },
+                            )
+                          ],
                         ),
-                  ],
-                ),
-              ],
-            ),
-SizedBox(height: 30.0,
-),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Activities",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Tests",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18.0),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'assets/images/tests_icon_final.png'),
+                              iconSize: 150,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TestCategoryScreen()));
+                              },
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon:
-                          Image.asset('assets/images/activities_icon_final.png'),
-                      iconSize: 150,
-                      onPressed: () {
-                        Navigator.push(context,
-      MaterialPageRoute(builder: (context) => const RateMoodScreen()));
-                      },
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Tests",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-                    ),
-                    IconButton(
-                      icon: Image.asset('assets/images/tests_icon_final.png'),
-                      iconSize: 150,
-                      onPressed: () {
-                          Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestCategoryScreen()));
-                      },
-                    )
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Motivation",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
-                    ),
-                    IconButton(
-                      icon:
-                          Image.asset('assets/images/motivation_icon_final.png'),
-                      iconSize: 150,
-                      onPressed: () {
-                        //MotivationPage
-                          Navigator.push(context,
-      MaterialPageRoute(builder: (context) => const MotivationLayoutScreen()));
-                      },
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Articles",
-                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0),
-                    ),
-                    IconButton(
-                      icon: Image.asset('assets/images/articles_icon_final.png'),
-                      iconSize: 150,
-                      onPressed: () {
-                          Navigator.push(context,
-      MaterialPageRoute(builder: (context) => const ArticlesScreen()));
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Motivation",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18.0),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'assets/images/motivation_icon_final.png'),
+                              iconSize: 150,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MotivationLayoutScreen()));
+                              },
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Articles",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18.0),
+                            ),
+                            IconButton(
+                              icon: Image.asset(
+                                  'assets/images/articles_icon_final.png'),
+                              iconSize: 150,
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ArticlesScreen()));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-}
+              ),
+            );
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        else{
-          return const Center(child:CircularProgressIndicator(),);
-        }
-        
-        return const Center(child:Text('No data'),);
+
+        return const Center(
+          child: Text('No data'),
+        );
       },
-      
     );
   }
 }

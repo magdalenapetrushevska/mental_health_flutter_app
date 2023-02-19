@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/constants.dart';
 import 'package:mental_health_flutter_app/screens/test_screen.dart';
+
 class TestCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mental Health Tests'),
-        backgroundColor:background,
+        backgroundColor: background,
       ),
       body: Center(
         child: Column(
@@ -25,20 +26,24 @@ class TestCategoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(
+                    side: const BorderSide(
                       color: background,
                       width: 2,
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Anxiety Test",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestScreen(testCategory: 'anxiety',)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TestScreen(
+                                  testCategory: 'anxiety',
+                                )));
                   },
                 ),
               ),
@@ -50,17 +55,21 @@ class TestCategoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: background, width: 2),
+                    side: const BorderSide(color: background, width: 2),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Depression Test",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestScreen(testCategory: 'depression',)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TestScreen(
+                                  testCategory: 'depression',
+                                )));
                   },
                 ),
               ),
@@ -72,17 +81,21 @@ class TestCategoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: background, width: 2),
+                    side: const BorderSide(color: background, width: 2),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Imposter syndrome Test",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestScreen(testCategory: 'imposter',)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TestScreen(
+                                  testCategory: 'imposter',
+                                )));
                   },
                 ),
               ),
@@ -94,17 +107,21 @@ class TestCategoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: background, width: 2),
+                    side: const BorderSide(color: background, width: 2),
                   ),
-                  child: Text(
+                  child: const Text(
                     "OCD Test",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => TestScreen(testCategory: 'ocd',)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TestScreen(
+                                  testCategory: 'ocd',
+                                )));
                   },
                 ),
               ),

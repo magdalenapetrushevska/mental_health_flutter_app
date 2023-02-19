@@ -1,45 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/models/completed_activity.dart';
-import 'package:mental_health_flutter_app/screens/example_testing_screen.dart';
-import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import '../constants.dart';
 import '../db_connection/db_connect.dart';
 import 'mark_activity_completed.dart';
-//class ActivityInfoScreen extends StatelessWidget {
 
-  class ActivityInfoScreen extends StatefulWidget {
- const ActivityInfoScreen({Key? key,
- required this.activityId,
-   required this.title,
-  }) : super(key:key);
+class ActivityInfoScreen extends StatefulWidget {
+  const ActivityInfoScreen({
+    Key? key,
+    required this.activityId,
+    required this.title,
+  }) : super(key: key);
 
-final String activityId;
-final String title;
-  
+  final String activityId;
+  final String title;
 
   @override
-  _ActivityInfoScreenState createState() => _ActivityInfoScreenState(title: title,activityId:activityId);
+  _ActivityInfoScreenState createState() =>
+      _ActivityInfoScreenState(title: title, activityId: activityId);
 }
 
 class _ActivityInfoScreenState extends State<ActivityInfoScreen> {
-
-    var title;
-    var activityId;
+  var title = '';
+  var activityId = '';
 
   _ActivityInfoScreenState({
-  required this.title,
-  required this.activityId,
+    required this.title,
+    required this.activityId,
   });
-  
+
   var db = DBconnect();
 
-void onPressed(){
-  db.addCompletedActivity(CompletedActivity(id: '3', title: title, isCompleted: 'false'));
-  Navigator.push(context,
-      MaterialPageRoute(builder: (context) =>  ActivityCompletitionScreen(activityId:activityId,title:title)));
-}
-
-
+  void onPressed() {
+    db.addCompletedActivity(
+        CompletedActivity(id: '3', title: title, isCompleted: 'false'));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ActivityCompletitionScreen(
+                activityId: activityId, title: title)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +59,7 @@ void onPressed(){
               ),
             ),
             const Padding(
-              padding:  EdgeInsets.only(
+              padding: EdgeInsets.only(
                   left: 30.0, top: 8.0, bottom: 15.0, right: 15),
               child: Text(
                   "Find quiet place. Do the chosen activity for the next half and hour."),
@@ -80,7 +79,7 @@ void onPressed(){
               ),
             ),
             const Padding(
-              padding:  EdgeInsets.only(
+              padding: EdgeInsets.only(
                   left: 30.0, top: 8.0, bottom: 15.0, right: 15),
               child: Text(
                   "This activity releases endorphins in your body. Endorphins are pleasure-inducing chemicals that reduce stress and anxiety."),

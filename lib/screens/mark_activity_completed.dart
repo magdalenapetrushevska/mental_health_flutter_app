@@ -4,50 +4,38 @@ import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import '../constants.dart';
 import '../db_connection/db_connect.dart';
 
-
-
-
-// class ActivityCompletitionScreen extends StatelessWidget {
-//   const ActivityCompletitionScreen({super.key});
-
-
-
 class ActivityCompletitionScreen extends StatefulWidget {
- const ActivityCompletitionScreen({Key? key,
-   required this.activityId,
+  const ActivityCompletitionScreen({
+    Key? key,
+    required this.activityId,
     required this.title,
-  }) : super(key:key);
+  }) : super(key: key);
 
-   final String activityId;
-   final String title;
+  final String activityId;
+  final String title;
 
   @override
-  _ActivityCompletitionScreenState createState() => _ActivityCompletitionScreenState(activityId: activityId,title:title);
+  _ActivityCompletitionScreenState createState() =>
+      _ActivityCompletitionScreenState(activityId: activityId, title: title);
 }
 
-class _ActivityCompletitionScreenState extends State<ActivityCompletitionScreen> {
+class _ActivityCompletitionScreenState
+    extends State<ActivityCompletitionScreen> {
+  String activityId;
+  String title;
 
-    String activityId;
-    String title;
-
-  //_ActivityScreenState();
   _ActivityCompletitionScreenState({
-  required this.activityId,
-  required this.title,
+    required this.activityId,
+    required this.title,
   });
 
- var db = DBconnect();
+  var db = DBconnect();
 
-void onPressed(){
-  //db.updateCompletedActivtiy(activityId: activityId);
-  db.updateCompletedActivtiy(activityId,title);
-  // db.addCompletedActivity(CompletedActivity(id: '3', title: title, isCompleted: 'false'));
-  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const MyActivitiesScreen()));
-}
-
-
-
-
+  void onPressed() {
+    db.updateCompletedActivtiy(activityId, title);
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const MyActivitiesScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +70,7 @@ void onPressed(){
                     side: const BorderSide(color: background, width: 2),
                   ),
                   onPressed: onPressed,
-                  child:  const Text(
+                  child: const Text(
                     "Completed",
                     style: TextStyle(
                       color: Colors.black,
@@ -110,7 +98,8 @@ void onPressed(){
                     ),
                   ),
                   onPressed: () {
-                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=> HomeScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
                   },
                 ),
               ),

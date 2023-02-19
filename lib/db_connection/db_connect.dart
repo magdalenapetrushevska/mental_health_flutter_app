@@ -5,18 +5,14 @@ import 'package:mental_health_flutter_app/models/quote_model.dart';
 import '../models/question_model.dart';
 import 'dart:convert';
 import 'dart:math';
-
 import '../models/article_model.dart';
 import '../models/completed_activity.dart';
 import '../models/mood_model.dart';
 
-class DBconnect{
-
-
-
-
-Future<void> updateMood(String moodId, Mood mood) async {
-    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods/$moodId.json');
+class DBconnect {
+  Future<void> updateMood(String moodId, Mood mood) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods/$moodId.json');
     http.put(
       url,
       body: json.encode({
@@ -26,8 +22,7 @@ Future<void> updateMood(String moodId, Mood mood) async {
     );
   }
 
-
-    Future<void> addActivity(Activity activty) async {
+  Future<void> addActivity(Activity activty) async {
     final url = Uri.parse(
         'https://mental-health-flutter-app-default-rtdb.firebaseio.com/activities.json');
     http.post(url,
@@ -36,9 +31,8 @@ Future<void> updateMood(String moodId, Mood mood) async {
           'moodCategory': activty.moodCategory,
         }));
   }
-  
-  
-    Future<void> addCompletedActivity(CompletedActivity activity) async {
+
+  Future<void> addCompletedActivity(CompletedActivity activity) async {
     final url = Uri.parse(
         'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
     http.post(url,
@@ -48,58 +42,52 @@ Future<void> updateMood(String moodId, Mood mood) async {
         }));
   }
 
-Future<List<CompletedActivity>> fetchCompltedActivities() async {
-    
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
+  Future<List<CompletedActivity>> fetchCompltedActivities() async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
 
-   return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<CompletedActivity> newCompltedActivities = [];
 
-      data.forEach((key, value){
-        var newCompltedActivity =  CompletedActivity(
+      data.forEach((key, value) {
+        var newCompltedActivity = CompletedActivity(
           id: key,
           title: value['title'],
-          isCompleted:value['isCompleted'],
+          isCompleted: value['isCompleted'],
         );
 
         newCompltedActivities.add(newCompltedActivity);
       });
-      //print(newCompltedActivities);
       return newCompltedActivities;
     });
+  }
 
-}
+  Future<List<ContactSettings>> fetchContact() async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
 
-
-
-Future<List<ContactSettings>> fetchContact() async {
-    
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
-
-   return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<ContactSettings> contactsSettings = [];
 
-      data.forEach((key, value){
-        var newContactSetting =  ContactSettings(
+      data.forEach((key, value) {
+        var newContactSetting = ContactSettings(
           id: key,
           phone: value['phone'],
-          email:value['email'],
+          email: value['email'],
         );
 
         contactsSettings.add(newContactSetting);
       });
       return contactsSettings;
     });
+  }
 
-}
-
-
-
-
-  Future<void> updateContactSettings(String contactId,String phone, String email) async {
-    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings/$contactId.json');
+  Future<void> updateContactSettings(
+      String contactId, String phone, String email) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings/$contactId.json');
     http.put(
       url,
       body: json.encode({
@@ -109,9 +97,9 @@ Future<List<ContactSettings>> fetchContact() async {
     );
   }
 
-
-  Future<void> updateCompletedActivtiy(String activityId,String title) async {
-    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
+  Future<void> updateCompletedActivtiy(String activityId, String title) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
     http.put(
       url,
       body: json.encode({
@@ -121,8 +109,7 @@ Future<List<ContactSettings>> fetchContact() async {
     );
   }
 
-
-    Future<void> addMood(Mood mood) async {
+  Future<void> addMood(Mood mood) async {
     final url = Uri.parse(
         'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
     http.post(url,
@@ -132,7 +119,7 @@ Future<List<ContactSettings>> fetchContact() async {
         }));
   }
 
-      Future<void> addContact(ContactSettings contact) async {
+  Future<void> addContact(ContactSettings contact) async {
     final url = Uri.parse(
         'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
     http.post(url,
@@ -141,7 +128,6 @@ Future<List<ContactSettings>> fetchContact() async {
           'email': contact.email,
         }));
   }
-
 
   Future<void> addArticle(Article article) async {
     final url = Uri.parse(
@@ -180,47 +166,45 @@ Future<List<ContactSettings>> fetchContact() async {
         randomNumber = random.nextInt(newActivities.length);
         recommendedActivities.add(newActivities[randomNumber]);
       }
-      
+
       return recommendedActivities;
     });
   }
 
+  Future<List<Mood>> fetchMoods() async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
 
-Future<List<Mood>> fetchMoods() async {
-    
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
-
-   return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<Mood> newMoods = [];
 
-      data.forEach((key, value){
-        var newMood =  Mood(
+      data.forEach((key, value) {
+        var newMood = Mood(
           id: key,
           mood: value['mood'],
-          datetime:value['datetime'],
+          datetime: value['datetime'],
         );
 
         newMoods.add(newMood);
       });
       return newMoods;
     });
+  }
 
-}
+  Future<List<Article>> fetchArticles() async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
 
-Future<List<Article>> fetchArticles() async {
-    
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
-
-   return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<Article> newArticles = [];
 
-      data.forEach((key, value){
-        var newQuote =  Article(
+      data.forEach((key, value) {
+        var newQuote = Article(
           id: key,
           title: value['title'],
-          content:value['content'],
+          content: value['content'],
           imageUrl: value['imageUrl'],
         );
 
@@ -228,152 +212,127 @@ Future<List<Article>> fetchArticles() async {
       });
       return newArticles;
     });
+  }
 
-}
-
-    Future<void> addFavoriteQuote(Quote quote) async{
-      final favoriteQuoteUrl = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+  Future<void> addFavoriteQuote(Quote quote) async {
+    final favoriteQuoteUrl = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
     http.post(favoriteQuoteUrl,
-    body: json.encode({
-      'content':quote.content,
-      'author':quote.author,
-    }));
+        body: json.encode({
+          'content': quote.content,
+          'author': quote.author,
+        }));
   }
 
   Future<List<Question>> fetchQuestions(String testCategory) async {
+    if (testCategory == 'anxiety') {
+      final url = Uri.parse(
+          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/anxiety_questions.json');
 
-    if(testCategory=='anxiety'){
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/anxiety_questions.json');
+      return http.get(url).then((response) {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        List<Question> newQuestions = [];
 
-    return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
-      List<Question> newQuestions = [];
+        data.forEach((key, value) {
+          var newQuestion = Question(
+            id: key,
+            title: value['title'],
+            options: Map.castFrom(value['options']),
+          );
 
-      data.forEach((key, value){
-        var newQuestion =  Question(
-          id: key,
-          title:value['title'],
-          options: Map.castFrom(value['options']),
-        );
-
-        newQuestions.add(newQuestion);
+          newQuestions.add(newQuestion);
+        });
+        return newQuestions;
       });
-      return newQuestions;
-    });
+    } else if (testCategory == 'depression') {
+      final url = Uri.parse(
+          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/depression_questions.json');
+      return http.get(url).then((response) {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        List<Question> newQuestions = [];
 
-    }
-    else if(testCategory=='depression'){
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/depression_questions.json');
-      return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
-      List<Question> newQuestions = [];
+        data.forEach((key, value) {
+          var newQuestion = Question(
+            id: key,
+            title: value['title'],
+            options: Map.castFrom(value['options']),
+          );
 
-      data.forEach((key, value){
-        var newQuestion =  Question(
-          id: key,
-          title:value['title'],
-          options: Map.castFrom(value['options']),
-        );
-
-        newQuestions.add(newQuestion);
+          newQuestions.add(newQuestion);
+        });
+        return newQuestions;
       });
-      return newQuestions;
-    });
+    } else if (testCategory == 'imposter') {
+      final url = Uri.parse(
+          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/imposter_syndrome_questions.json');
+      return http.get(url).then((response) {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        List<Question> newQuestions = [];
 
-    }
-    else if(testCategory=='imposter'){
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/imposter_syndrome_questions.json');
-      return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
-      List<Question> newQuestions = [];
+        data.forEach((key, value) {
+          var newQuestion = Question(
+            id: key,
+            title: value['title'],
+            options: Map.castFrom(value['options']),
+          );
 
-      data.forEach((key, value){
-        var newQuestion =  Question(
-          id: key,
-          title:value['title'],
-          options: Map.castFrom(value['options']),
-        );
-
-        newQuestions.add(newQuestion);
+          newQuestions.add(newQuestion);
+        });
+        return newQuestions;
       });
-      return newQuestions;
-    });
+    } else {
+      final url = Uri.parse(
+          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/ocd_questions.json');
+      return http.get(url).then((response) {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        List<Question> newQuestions = [];
 
-    }
-    else{
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/ocd_questions.json');
-      return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
-      List<Question> newQuestions = [];
+        data.forEach((key, value) {
+          var newQuestion = Question(
+            id: key,
+            title: value['title'],
+            options: Map.castFrom(value['options']),
+          );
 
-      data.forEach((key, value){
-        var newQuestion =  Question(
-          id: key,
-          title:value['title'],
-          options: Map.castFrom(value['options']),
-        );
-
-        newQuestions.add(newQuestion);
+          newQuestions.add(newQuestion);
+        });
+        return newQuestions;
       });
-      return newQuestions;
-    });
-
     }
   }
 
-
   Future<bool> checkFavoriteQuoteExistence(String content) async {
-
     bool ret = false;
-    
-    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
-    return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
-      data.forEach((key, value){
-        if(value['content'] == content){
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
+
+      data.forEach((key, value) {
+        if (value['content'] == content) {
           ret = true;
         }
       });
       return ret;
     });
- 
   }
 
-  // Future<Quote> fetchRandomQuote() async {
-  //   Future<List<Quote>> newQuotes = fetchQuotes() as Future<List<Quote>>;
-  //   Random random = Random();
-  //   int randomNumber = 0;
-  //   randomNumber = random.nextInt(newQuotes.length);
-  //   return newQuotes[randomNumber];
-
-  // }
-
-
   Future<Quote> fetchRandomQuote() async {
-    
-    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
 
-    return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<Quote> newQuotes = [];
 
-      data.forEach((key, value){
-        var newQuote =  Quote(
+      data.forEach((key, value) {
+        var newQuote = Quote(
           id: key,
-          content:value['content'],
+          content: value['content'],
           author: value['author'],
         );
-
-        //extractedData.forEach((profileId, profileData) {
-      // loadedProfile.add(
-      //   Profile(
-      //     email: profileData['email'],
-      //     lastName: profileData['firstName'],
-      //     firstName: profileData['lastName'],
-      //   ),
-
         newQuotes.add(newQuote);
       });
 
@@ -381,27 +340,21 @@ Future<List<Article>> fetchArticles() async {
       int randomNumber = 0;
       randomNumber = random.nextInt(newQuotes.length);
       return newQuotes[randomNumber];
-      //return newQuotes;
     });
- 
   }
 
+  Future<List<Quote>> fetchFavoriteQuotes() async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
-
-
-Future<List<Quote>> fetchFavoriteQuotes() async {
-
-    
-      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
-
-   return http.get(url).then((response){
-      var data = json.decode(response.body) as Map<String,dynamic>;
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
       List<Quote> newQuotes = [];
 
-      data.forEach((key, value){
-        var newQuote =  Quote(
+      data.forEach((key, value) {
+        var newQuote = Quote(
           id: key,
-          content:value['content'],
+          content: value['content'],
           author: value['author'],
         );
 
@@ -409,27 +362,5 @@ Future<List<Quote>> fetchFavoriteQuotes() async {
       });
       return newQuotes;
     });
-
+  }
 }
-
-
-// Random random = Random();
-//   int randomNumber = 0;
-
-//   void _quotesGenerator() {
-//     setState(() {
-//       randomNumber = random.nextInt(quotes.length);
-//     });
-//   }
-
-
-
-
-
-    
-}
-   
-  
-
-
-

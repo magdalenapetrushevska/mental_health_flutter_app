@@ -1,103 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:mental_health_flutter_app/models/article_model.dart';
-import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
-import 'package:mental_health_flutter_app/widgets/article_widget.dart';
 import '../constants.dart';
 import '../models/activity.dart';
 import '../db_connection/db_connect.dart';
 import '../widgets/activity_widget.dart';
 
-
-
-//fetchArticles
 class ActivityScreen extends StatefulWidget {
- const ActivityScreen({Key? key,
-   required this.moodCategory,
-  }) : super(key:key);
+  const ActivityScreen({
+    Key? key,
+    required this.moodCategory,
+  }) : super(key: key);
 
-   final int moodCategory;
+  final int moodCategory;
 
   @override
-  _ActivityScreenState createState() => _ActivityScreenState(moodCategory: moodCategory);
+  _ActivityScreenState createState() =>
+      _ActivityScreenState(moodCategory: moodCategory);
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
+  int moodCategory;
 
-    int moodCategory;
-
-  //_ActivityScreenState();
   _ActivityScreenState({
-  required this.moodCategory,
+    required this.moodCategory,
   });
 
- var db = DBconnect();
+  var db = DBconnect();
 
   late Future _activities;
 
-  Future<List<Activity>> getData() async{
+  Future<List<Activity>> getData() async {
     return db.fetchActivities(moodCategory);
   }
 
   @override
-  void initState(){
+  void initState() {
     _activities = getData();
     super.initState();
   }
 
-   int index = 0;
-
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
-        return FutureBuilder(
+    return FutureBuilder(
       future: _activities as Future<List<Activity>>,
-      builder: (ctx,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return Center(child:Text('${snapshot.error}'),);
-          } else if(snapshot.hasData){
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else if (snapshot.hasData) {
             var extractedData = snapshot.data as List<Activity>;
-                return Scaffold(
-        body: NestedScrollView(
-            floatHeaderSlivers: true,
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  title: const Text('Recommended activities'),
-                  backgroundColor: background,
-                  floating: true,
-                  expandedHeight: 50.0,
-                  forceElevated: innerBoxIsScrolled,
-                ),
-              ];
-            },
-            body:ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: extractedData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(children: [
-                      ActivityWidget(
-                        activityId: extractedData[index].id,
-                    title: extractedData[index].title,
-                  ),
-                  ],);
-                }
-                ),
-                
-             
-                ),
-                );
+            return Scaffold(
+              body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverAppBar(
+                      title: const Text('Recommended activities'),
+                      backgroundColor: background,
+                      floating: true,
+                      expandedHeight: 50.0,
+                      forceElevated: innerBoxIsScrolled,
+                    ),
+                  ];
+                },
+                body: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: extractedData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          ActivityWidget(
+                            activityId: extractedData[index].id,
+                            title: extractedData[index].title,
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+            );
           }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        else{
-          return const Center(child:CircularProgressIndicator(),);
-        }
-        
-        return const Center(child:Text('No data'),);
+
+        return const Center(
+          child: Text('No data'),
+        );
       },
-      
     );
   }
 }
-

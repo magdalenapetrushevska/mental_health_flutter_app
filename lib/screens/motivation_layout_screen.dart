@@ -3,25 +3,20 @@ import 'favorites_screen.dart';
 import 'motivation_screen.dart';
 
 class MotivationLayoutScreen extends StatefulWidget {
-  const MotivationLayoutScreen({Key? key,
-  }) : super(key:key);
-
+  const MotivationLayoutScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _MotivationLayoutScreenState createState() => _MotivationLayoutScreenState();
 }
 
 class _MotivationLayoutScreenState extends State<MotivationLayoutScreen> {
-
-
   _MotivationLayoutScreenState();
-  
 
- var selectedIndex = 0;
+  var selectedIndex = 0;
 
-
-
-@override
+  @override
   Widget build(BuildContext context) {
     Widget page;
     switch (selectedIndex) {
