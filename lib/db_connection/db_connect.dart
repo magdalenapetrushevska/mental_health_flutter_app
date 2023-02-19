@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:mental_health_flutter_app/models/activity.dart';
+import 'package:mental_health_flutter_app/models/emergency_contact_model.dart';
 import 'package:mental_health_flutter_app/models/quote_model.dart';
 import '../models/question_model.dart';
 import 'dart:convert';
@@ -72,6 +73,43 @@ Future<List<CompletedActivity>> fetchCompltedActivities() async {
 
 
 
+Future<List<ContactSettings>> fetchContact() async {
+    
+      final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
+
+   return http.get(url).then((response){
+      var data = json.decode(response.body) as Map<String,dynamic>;
+      List<ContactSettings> contactsSettings = [];
+
+      data.forEach((key, value){
+        var newContactSetting =  ContactSettings(
+          id: key,
+          phone: value['phone'],
+          email:value['email'],
+        );
+
+        contactsSettings.add(newContactSetting);
+      });
+      return contactsSettings;
+    });
+
+}
+
+
+
+
+  Future<void> updateContactSettings(String contactId,String phone, String email) async {
+    final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings/$contactId.json');
+    http.put(
+      url,
+      body: json.encode({
+        'phone': phone,
+        'email': email,
+      }),
+    );
+  }
+
+
   Future<void> updateCompletedActivtiy(String activityId,String title) async {
     final url = Uri.parse('https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
     http.put(
@@ -91,6 +129,16 @@ Future<List<CompletedActivity>> fetchCompltedActivities() async {
         body: json.encode({
           'mood': mood.mood,
           'datetime': mood.datetime,
+        }));
+  }
+
+      Future<void> addContact(ContactSettings contact) async {
+    final url = Uri.parse(
+        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
+    http.post(url,
+        body: json.encode({
+          'phone': contact.phone,
+          'email': contact.email,
         }));
   }
 

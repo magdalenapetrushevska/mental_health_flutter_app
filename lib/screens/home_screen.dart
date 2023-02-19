@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mental_health_flutter_app/models/emergency_contact_model.dart';
 import 'package:mental_health_flutter_app/screens/mood_history_screen.dart';
 import 'package:mental_health_flutter_app/screens/my_activities_screen.dart';
 import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
 import 'package:mental_health_flutter_app/screens/test_category_screen.dart';
 import '../constants.dart';
 import '../db_connection/db_connect.dart';
+import '../widgets/contact_settings_widget.dart';
 import 'articles_screen.dart';
 import 'motivation_layout_screen.dart';
 import 'package:flutter_sms/flutter_sms.dart';
@@ -26,13 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
  String location ='Null, Press Button';
   String Address = 'search';
+  String emergencyPhone = '';
+  String psychotherapistEmail = '';
+  String contactId = '';
+
 
 
  var db = DBconnect();
 
+  late Future _contact;
+
+  Future<List<ContactSettings>> getData() async{
+    return db.fetchContact();
+  }
+
 
   @override
   void initState(){
+    _contact = getData();
     super.initState();
   }
 
@@ -117,10 +130,43 @@ void onPressed() async {
     });
   }
 
+  //   String emergencyPhone = '';
+  // String psychotherapistEmail = '';
+
+void changeSettings() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => ContactSettingsBox(
+          contactId:contactId,
+              phone: emergencyPhone,
+              email: psychotherapistEmail,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen()));
+              },
+            ));
+            
+  }
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    return FutureBuilder(
+      future: _contact as Future<List<ContactSettings>>,
+      builder: (ctx,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(child:Text('${snapshot.error}'),);
+          } else if(snapshot.hasData){
+            var extractedData = snapshot.data as List<ContactSettings>;
+            for(int i=0;i<extractedData.length;i++){
+              contactId = extractedData[i].id;
+              emergencyPhone = extractedData[i].phone;
+              psychotherapistEmail = extractedData[i].email;
+            }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -133,95 +179,84 @@ void onPressed() async {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(.0),
-                  child: Column(
-                    children: [
-                      FloatingActionButton(
-                        onPressed: onPressed,
-                        tooltip: 'Send SMS',
-                        child: const Icon(Icons.local_hospital),
-                      ),
-                    ],
-                ),
-                    ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 160,
-                      height: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 8.0, left: 8.0, top: 8.0, bottom: 2.5),
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(),
-                          child: const Text(
-                            "Mood history",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MoodHistoryScreen()));
-                          },
+
+Padding(
+                      padding: const EdgeInsets.only(left: 20.0,),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MoodHistoryScreen()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 15.0),
+                          primary: Colors.deepPurpleAccent,
+                          shape: StadiumBorder(),
+                        ),
+                        child: Text(
+                          "Mood history",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 170,
-                      height: 40,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 8.0, left: 8.0, bottom: 8.0, top: 2.5),
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(),
-                          child: const Text(
-                            "My activities",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          onPressed: () {
+                    SizedBox(height: 15.0,),
+                    ElevatedButton(
+                      onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>const  MyActivitiesScreen()));
+                                    builder: (context) => const MyActivitiesScreen()));
                           },
-                        ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 15.0),
+                        primary: Colors.deepPurpleAccent,
+                        shape: StadiumBorder(),
+                      ),
+                      child: Text(
+                        "My activities",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
+
                   ],
                 ),
-              ],
-            ),
-            Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, bottom: 30.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/images/avatar.jpg'),
-                          ),
-                          Text("Magdalena"),
-                          Text("Petrushevska"),
-                        ],
-                      ),
+                    Column(
+                      children: [
+                        FloatingActionButton(
+                          backgroundColor: Colors.red,
+                          onPressed: onPressed,
+                          tooltip: 'Send SMS',
+                          child: const Icon(Icons.local_hospital),
+                        ),
+                      ],
                     ),
+                        Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          FloatingActionButton(
+                            onPressed: changeSettings,
+                            tooltip: 'Send SMS',
+                            child: const Icon(Icons.settings),
+                          ),
+                        ],
+                    ),
+                        ),
                   ],
                 ),
               ],
             ),
+SizedBox(height: 30.0,
+),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -230,15 +265,15 @@ void onPressed() async {
                   children: [
                     const Text(
                       "Activities",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                     IconButton(
                       icon:
-                          Image.asset('assets/images/home_page_activities.png'),
+                          Image.asset('assets/images/activities_icon_final.png'),
                       iconSize: 150,
                       onPressed: () {
                         Navigator.push(context,
-      MaterialPageRoute(builder: (context) => RateMoodScreen()));
+      MaterialPageRoute(builder: (context) => const RateMoodScreen()));
                       },
                     )
                   ],
@@ -248,10 +283,10 @@ void onPressed() async {
                   children: [
                     const Text(
                       "Tests",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/home_page_tests.png'),
+                      icon: Image.asset('assets/images/tests_icon_final.png'),
                       iconSize: 150,
                       onPressed: () {
                           Navigator.push(context,
@@ -270,11 +305,11 @@ void onPressed() async {
                   children: [
                     const Text(
                       "Motivation",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                     ),
                     IconButton(
                       icon:
-                          Image.asset('assets/images/home_page_motivation.png'),
+                          Image.asset('assets/images/motivation_icon_final.png'),
                       iconSize: 150,
                       onPressed: () {
                         //MotivationPage
@@ -289,10 +324,10 @@ void onPressed() async {
                   children: [
                     const Text(
                       "Articles",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0),
                     ),
                     IconButton(
-                      icon: Image.asset('assets/images/home_page_articles.png'),
+                      icon: Image.asset('assets/images/articles_icon_final.png'),
                       iconSize: 150,
                       onPressed: () {
                           Navigator.push(context,
@@ -306,6 +341,16 @@ void onPressed() async {
           ],
         ),
       ),
+    );
+}
+        }
+        else{
+          return const Center(child:CircularProgressIndicator(),);
+        }
+        
+        return const Center(child:Text('No data'),);
+      },
+      
     );
   }
 }

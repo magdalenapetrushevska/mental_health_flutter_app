@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mental_health_flutter_app/models/emergency_contact_model.dart';
 import 'package:mental_health_flutter_app/screens/home_screen.dart';
 import 'db_connection/db_connect.dart';
 import 'package:workmanager/workmanager.dart';

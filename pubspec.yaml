@@ -48,6 +48,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   timezone: ^0.9.1
   workmanager: ^0.5.1
+  draggable_fab: ^0.1.4
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,15 @@ flutter:
     - assets/images/feeling_okay.png
     - assets/images/feeling_good.png
     - assets/images/feeling_great.png
+    - assets/images/articles_home_page_icon.png
+    - assets/images/motivation_home_page_icon.png
+    - assets/images/tests_home_page_icon.png
+    - assets/images/activities_home_page_icon.png
+    - assets/images/home_page_motivation_img.png
+    - assets/images/articles_icon_final.png
+    - assets/images/motivation_icon_final.png
+    - assets/images/activities_icon_final.png
+    - assets/images/tests_icon_final.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
