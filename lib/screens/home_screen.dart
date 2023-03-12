@@ -13,6 +13,8 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  LocalAuthentication auth = LocalAuthentication();
   String location = 'Null, Press Button';
   String address = 'search';
   String emergencyPhone = '';
@@ -40,6 +43,58 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     _contact = getData();
     super.initState();
+  }
+
+  // Future authenticate() async {
+  //   final bool isBiometricsAvailable = await auth.isDeviceSupported();
+
+  //   if (!isBiometricsAvailable) return false;
+
+  //   try {
+  //     return await auth.authenticate(
+  //       localizedReason: 'Scan Fingerprint To Enter Vault',
+  //       options: const AuthenticationOptions(
+  //         useErrorDialogs: true,
+  //         stickyAuth: true,
+  //       ),
+  //     );
+  //   } on PlatformException {
+  //     return;
+  //   }
+  // }
+
+   String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+          localizedReason: 'Let OS determine authentication method',);
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = "Error - ${e.message}";
+      });
+      return;
+    }
+    if (!mounted) return;
+
+    setState(
+        () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+
+
+        if(authenticated){
+          generateMessage();
+        }
   }
 
   Future<void> initLocation() async {
@@ -94,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print(send_result);
   }
 
-  void onPressed() async {
+  void generateMessage() async {
     Position position = await _getGeoLocationPosition();
     location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
     await getAddressFromLatLong(position).then((result) {
@@ -212,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 FloatingActionButton(
                                   heroTag: "btn1",
                                   backgroundColor: Colors.red,
-                                  onPressed: onPressed,
+                                  onPressed: _authenticate,
                                   tooltip: 'Send SMS',
                                   child: const Icon(Icons.local_hospital),
                                 ),

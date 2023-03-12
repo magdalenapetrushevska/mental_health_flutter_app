@@ -49,6 +49,7 @@ dependencies:
   timezone: ^0.9.1
   workmanager: ^0.5.1
   draggable_fab: ^0.1.4
+  local_auth: ^2.1.6
 
 dev_dependencies:
   flutter_test:

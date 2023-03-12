@@ -71,10 +71,6 @@ void main() {
   //   Question(id:'1',title:'Question 2 example', options:{}),
   // );
 
-          db.addFavoriteQuote(
-    Quote(id:'1',content:'bla bla', author:'bla bla'),
-  );
-
 
   //         db.addCompletedActivity(
   //   CompletedActivity(id:'1',title:'bla bla', isCompleted:'bla bla'),
