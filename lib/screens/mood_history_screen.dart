@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mental_health_flutter_app/screens/rate_mood_screen.dart';
 import '../constants.dart';
 import '../db_connection/db_connect.dart';
+import '../models/emergency_contact_model.dart';
 import '../models/mood_model.dart';
 import '../widgets/mood_widget.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -21,10 +22,18 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
   var db = DBconnect();
   String emailBodyContent = 'The following is the list of history mood:\n\n';
 
+  String emailAddress = '';
+
   late Future _moods;
+
+  late ContactSettings _contact;
 
   Future<List<Mood>> getData() async {
     return db.fetchMoods();
+  }
+
+    Future<List<ContactSettings>> getContact() async {
+    return db.fetchContact();
   }
 
   generateEmailBodyContent() {}
@@ -32,8 +41,9 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
   void sendEmail() async {
     final Email send_email = Email(
       body: emailBodyContent,
-      subject: 'subject of email',
-      recipients: ['magdalenapetrusevska9@gmail.com'],
+      subject: 'Mood history report',
+      //recipients: ['magdalenapetrusevska9@gmail.com'],
+      recipients: [emailAddress],
       isHTML: false,
     );
 
@@ -43,6 +53,8 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
   @override
   void initState() {
     _moods = getData();
+    db.fetchEmailContact();
+    emailAddress = DBconnect.emailAddress;
     super.initState();
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:mental_health_flutter_app/models/activity.dart';
 import 'package:mental_health_flutter_app/models/emergency_contact_model.dart';
@@ -10,9 +11,14 @@ import '../models/completed_activity.dart';
 import '../models/mood_model.dart';
 
 class DBconnect {
+
+  static String emailAddress = '';
+
+static const defaultDbURI = 'https://flutter-mental-health-app-default-rtdb.firebaseio.com';
+
   Future<void> updateMood(String moodId, Mood mood) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods/$moodId.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/moods/$moodId.json');
     http.put(
       url,
       body: json.encode({
@@ -24,7 +30,7 @@ class DBconnect {
 
   Future<void> addActivity(Activity activty) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/activities.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/activities.json');
     http.post(url,
         body: json.encode({
           'title': activty.title,
@@ -34,7 +40,7 @@ class DBconnect {
 
   Future<void> addCompletedActivity(CompletedActivity activity) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/completed_activities.json');
     http.post(url,
         body: json.encode({
           'title': activity.title,
@@ -44,7 +50,7 @@ class DBconnect {
 
   Future<List<CompletedActivity>> fetchCompltedActivities() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/completed_activities.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -65,7 +71,7 @@ class DBconnect {
 
   Future<List<ContactSettings>> fetchContact() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/contact_settings.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -84,10 +90,32 @@ class DBconnect {
     });
   }
 
+    Future<ContactSettings> fetchEmailContact() async {
+    final url = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/contact_settings.json');
+
+    return http.get(url).then((response) {
+      var data = json.decode(response.body) as Map<String, dynamic>;
+      List<ContactSettings> contactsSettings = [];
+
+      data.forEach((key, value) {
+        var newContactSetting = ContactSettings(
+          id: key,
+          phone: value['phone'],
+          email: value['email'],
+        );
+
+        contactsSettings.add(newContactSetting);
+      });
+      emailAddress = contactsSettings[0].email;
+      return contactsSettings[0];
+    });
+  }
+
   Future<void> updateContactSettings(
       String contactId, String phone, String email) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings/$contactId.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/contact_settings/$contactId.json');
     http.put(
       url,
       body: json.encode({
@@ -99,7 +127,7 @@ class DBconnect {
 
   Future<void> updateCompletedActivtiy(String activityId, String title) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/completed_activities/$activityId.json');
     http.put(
       url,
       body: json.encode({
@@ -111,7 +139,7 @@ class DBconnect {
 
   Future<void> addMood(Mood mood) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/moods.json');
     http.post(url,
         body: json.encode({
           'mood': mood.mood,
@@ -121,7 +149,7 @@ class DBconnect {
 
   Future<void> addContact(ContactSettings contact) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/contact_settings.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/contact_settings.json');
     http.post(url,
         body: json.encode({
           'phone': contact.phone,
@@ -131,7 +159,7 @@ class DBconnect {
 
   Future<void> addArticle(Article article) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/articles.json');
     http.post(url,
         body: json.encode({
           'title': article.title,
@@ -142,7 +170,7 @@ class DBconnect {
 
   Future<List<Activity>> fetchActivities(int mood) async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/activities.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/activities.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -173,7 +201,7 @@ class DBconnect {
 
   Future<List<Mood>> fetchMoods() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/moods.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/moods.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -194,7 +222,7 @@ class DBconnect {
 
   Future<List<Article>> fetchArticles() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/articles.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/articles.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -216,7 +244,7 @@ class DBconnect {
 
   Future<void> addFavoriteQuote(Quote quote) async {
     final favoriteQuoteUrl = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/favorites-quotes.json');
     http.post(favoriteQuoteUrl,
         body: json.encode({
           'content': quote.content,
@@ -224,10 +252,60 @@ class DBconnect {
         }));
   }
 
+    Future<void> addQuote(Quote quote) async {
+    final QuoteUrl = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/quotes.json');
+    http.post(QuoteUrl,
+        body: json.encode({
+          'content': quote.content,
+          'author': quote.author,
+        }));
+  }
+
+    Future<void> addOCDQuestion(Question question) async {
+    final ocdQuestionUrl = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/ocd_questions.json');
+    http.post(ocdQuestionUrl,
+        body: json.encode({
+          'title': question.title,
+          'options': question.options,
+        }));
+  }
+
+      Future<void> addAnxietyQuestion(Question question) async {
+    final anxietyQuestionUrl = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/anxiety_questions.json');
+    http.post(anxietyQuestionUrl,
+        body: json.encode({
+          'title': question.title,
+          'options': question.options,
+        }));
+  }
+
+        Future<void> addDepressionQuestion(Question question) async {
+    final depressionQuestionUrl = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/depression_questions.json');
+    http.post(depressionQuestionUrl,
+        body: json.encode({
+          'title': question.title,
+          'options': question.options,
+        }));
+  }
+
+         Future<void> addImposterSyndromeQuestion(Question question) async {
+    final imposterSyndromeQuestionUrl = Uri.parse(
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/imposter_syndrome_questions.json');
+    http.post(imposterSyndromeQuestionUrl,
+        body: json.encode({
+          'title': question.title,
+          'options': question.options,
+        }));
+  }
+
   Future<List<Question>> fetchQuestions(String testCategory) async {
     if (testCategory == 'anxiety') {
       final url = Uri.parse(
-          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/anxiety_questions.json');
+          'https://flutter-mental-health-app-default-rtdb.firebaseio.com/anxiety_questions.json');
 
       return http.get(url).then((response) {
         var data = json.decode(response.body) as Map<String, dynamic>;
@@ -246,7 +324,7 @@ class DBconnect {
       });
     } else if (testCategory == 'depression') {
       final url = Uri.parse(
-          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/depression_questions.json');
+          'https://flutter-mental-health-app-default-rtdb.firebaseio.com/depression_questions.json');
       return http.get(url).then((response) {
         var data = json.decode(response.body) as Map<String, dynamic>;
         List<Question> newQuestions = [];
@@ -264,7 +342,7 @@ class DBconnect {
       });
     } else if (testCategory == 'imposter') {
       final url = Uri.parse(
-          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/imposter_syndrome_questions.json');
+          'https://flutter-mental-health-app-default-rtdb.firebaseio.com/imposter_syndrome_questions.json');
       return http.get(url).then((response) {
         var data = json.decode(response.body) as Map<String, dynamic>;
         List<Question> newQuestions = [];
@@ -282,7 +360,7 @@ class DBconnect {
       });
     } else {
       final url = Uri.parse(
-          'https://mental-health-flutter-app-default-rtdb.firebaseio.com/ocd_questions.json');
+          'https://flutter-mental-health-app-default-rtdb.firebaseio.com/ocd_questions.json');
       return http.get(url).then((response) {
         var data = json.decode(response.body) as Map<String, dynamic>;
         List<Question> newQuestions = [];
@@ -305,7 +383,7 @@ class DBconnect {
     bool ret = false;
 
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -321,7 +399,7 @@ class DBconnect {
 
   Future<Quote> fetchRandomQuote() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/quotes.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/quotes.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;
@@ -345,7 +423,7 @@ class DBconnect {
 
   Future<List<Quote>> fetchFavoriteQuotes() async {
     final url = Uri.parse(
-        'https://mental-health-flutter-app-default-rtdb.firebaseio.com/favorites-quotes.json');
+        'https://flutter-mental-health-app-default-rtdb.firebaseio.com/favorites-quotes.json');
 
     return http.get(url).then((response) {
       var data = json.decode(response.body) as Map<String, dynamic>;

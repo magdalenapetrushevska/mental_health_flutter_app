@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
       sending_SMS(
           'This is a mental health emergency message.\n The person that sends this message requires your help. \n\n Location: $address',
           [
-            '123456789',
+            emergencyPhone,
           ]);
     });
   }
@@ -210,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               children: [
                                 FloatingActionButton(
+                                  heroTag: "btn1",
                                   backgroundColor: Colors.red,
                                   onPressed: onPressed,
                                   tooltip: 'Send SMS',
@@ -222,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   FloatingActionButton(
+                                    heroTag: "btn2",
                                     onPressed: changeSettings,
                                     tooltip: 'Send SMS',
                                     child: const Icon(Icons.settings),
