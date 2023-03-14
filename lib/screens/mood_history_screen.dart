@@ -42,7 +42,6 @@ class _MoodHistoryScreenState extends State<MoodHistoryScreen> {
     final Email send_email = Email(
       body: emailBodyContent,
       subject: 'Mood history report',
-      //recipients: ['magdalenapetrusevska9@gmail.com'],
       recipients: [emailAddress],
       isHTML: false,
     );
